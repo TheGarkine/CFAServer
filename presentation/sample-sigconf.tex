@@ -1,0 +1,40 @@
+\documentclass[sigconf]{acmart}
+
+\usepackage{booktabs} % For formal tables
+%\usepackage[style=authoryear]{biblatex} 
+%\usepackage[natbib=true]{biblatex}
+% Copyright
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\copyrightyear{2019}
+\acmConference[AVmedBild]{AVmedBild}{Winter Term 2019}{Nuremberg}
+
+\usepackage[nodisplayskipstretch]{setspace}
+\setstretch{.91}
+
+\begin{document}
+
+\title{Curvicircular Feature Aggregation}
+\subtitle{Handout}
+
+\author{Raphael Krauthann}
+\affiliation{%
+  \institution{THN, Department of Computer Science}
+  \city{Nuremberg}
+  \state{Germany}
+}
+\email{krauthannra64754@th-nuernberg.de}
+
+\renewcommand{\shortauthors}{R. Krauthann}
+
+\keywords{Feature Aggregation, Image Processing, Medical Image Data, Vessel Analysis}
+
+\maketitle
+
+\input{content/samplebody-conf}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliography}
+
+\end{document}

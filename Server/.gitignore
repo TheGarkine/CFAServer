@@ -1,0 +1,7 @@
+__pycache__
+error.log
+build
+*.c
+*.so
+static/results/*
+tmp

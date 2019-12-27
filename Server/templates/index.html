@@ -1,0 +1,228 @@
+<html>
+  <head>
+    <title>CFA Image generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+      .form-style-1 {
+        margin:10px auto;
+        max-width: 400px;
+        padding: 20px 12px 10px 20px;
+        font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+      }
+      .form-style-1 li {
+        padding: 0;
+        display: block;
+        list-style: none;
+        margin: 10px 0 0 0;
+      }
+      .form-style-1 label{
+        margin:0 0 3px 0;
+        padding:0px;
+        display:block;
+        font-weight: bold;
+      }
+      .form-style-1 input[type=text], 
+      .form-style-1 input[type=date],
+      .form-style-1 input[type=datetime],
+      .form-style-1 input[type=number],
+      .form-style-1 input[type=search],
+      .form-style-1 input[type=time],
+      .form-style-1 input[type=url],
+      .form-style-1 input[type=email],
+      textarea, 
+      select{
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        border:1px solid #BEBEBE;
+        padding: 7px;
+        margin:0px;
+        -webkit-transition: all 0.30s ease-in-out;
+        -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+        -o-transition: all 0.30s ease-in-out;
+        outline: none;	
+      }
+      .form-style-1 input[type=text]:focus, 
+      .form-style-1 input[type=date]:focus,
+      .form-style-1 input[type=datetime]:focus,
+      .form-style-1 input[type=number]:focus,
+      .form-style-1 input[type=search]:focus,
+      .form-style-1 input[type=time]:focus,
+      .form-style-1 input[type=url]:focus,
+      .form-style-1 input[type=email]:focus,
+      .form-style-1 textarea:focus, 
+      .form-style-1 select:focus{
+        -moz-box-shadow: 0 0 8px #88D5E9;
+        -webkit-box-shadow: 0 0 8px #88D5E9;
+        box-shadow: 0 0 8px #88D5E9;
+        border: 1px solid #88D5E9;
+      }
+      .form-style-1 .field-divided{
+        width: 49%;
+      }
+      
+      .form-style-1 .field-long{
+        width: 100%;
+      }
+      .form-style-1 .field-select{
+        width: 100%;
+      }
+      .form-style-1 .field-textarea{
+        height: 100px;
+      }
+      .form-style-1 input[type=submit], .form-style-1 input[type=button]{
+        background: #4B99AD;
+        padding: 8px 15px 8px 15px;
+        border: none;
+        color: #fff;
+      }
+      .form-style-1 input[type=submit]:hover, .form-style-1 input[type=button]:hover{
+        background: #4691A4;
+        box-shadow:none;
+        -moz-box-shadow:none;
+        -webkit-box-shadow:none;
+      }
+      .form-style-1 .required{
+        color:red;
+      }
+      #loader {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.75) url(static/loading.gif) no-repeat center center;
+        z-index: 10000;
+      }
+      </style>
+      <style>
+          /* Tooltip container */
+          .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+          }
+          
+          /* Tooltip text */
+          .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 6px;
+           
+            /* Position the tooltip text - see examples below! */
+            position: absolute;
+            z-index: 1;
+          }
+
+          .tooltip .tooltiptext {
+            width: 120px;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+          }
+          
+          /* Show the tooltip text when you mouse over the tooltip container */
+          .tooltip:hover .tooltiptext {
+            visibility: visible;
+          }
+          </style>
+  </head>
+  <body>
+    <form method="post" action="cfa" enctype="multipart/form-data" id="form">
+      <ul class="form-style-1">
+          <li>
+              <h3>Medical Image Data<span class="required">*</span></h3>
+              <h4>DICOM<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext"> The .dcm file of the data to be used.</span></div></h4>
+              <input type="file" name="dcm" class="field-long" accept=".dcm" required/>
+              <h4>TIFF<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The .tif file of the data to be used.</span></div></h4>
+              <input type="file" name="tif" class="field-long" accept=".tif, .tiff" required/>
+              <h4>Isolation Mask (TIFF)<div class="tooltip">&#9432<span class="tooltiptext">The isolation mask which needs the same shape as the original data. It will be applied as cell-wise multiplication.</span></div></h4>
+              <input type="file" name="mask" class="field-long" accept=".tif, .tiff" />
+              <h4>Center Line (XML) <span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The Center Line, which needs to be in MeVis Format.</span></div></h4>
+              <input type="file" name="cline" class="field-long" accept=".xml" required />
+          </li>
+          <li>
+              <h3>Parameters<span class="required">*</span></h3>
+              <h4>Sample Strategy<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The sample strategy in which the circular rays should be samples. Additionally to "Constant Angle" and "Constant Arc", "Constant Number" is implementes.</span></div></h4>
+              <select name="sample_strategy" class="field-long">
+                  <option value="const_num">Constant Number</option>
+                  <option value="const_arc">Constant Arclength</option>
+                  <option value="const_angle">Constant Angle</option>
+              </select>
+              <h4>Sample Frequency<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The sample frequency is an integer for "Constant Number", or a float for "Constant Arc" (in mm) and "Constant Angle" (in radian).</span></div></h4>
+              <input type="number" name="sample_frequency" class="field-long" min="0.1" step="0.1" value="8" required/>
+              <h4>Circle Step Delta<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The distance in mm about which the circles should increase.</span></div></h4>
+              <input type="number" name="circle_delta" class="field-long" min="0.1" step="0.1" value="1" required/>
+              <h4>Centerline Step Delta<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The distance in mm about which the centerline should be sampled.</span></div></h4>
+              <input type="number" name="cline_step_distance" class="field-long" min="0.1" step="0.1" value="1" required/>
+              <h4>Max Radius<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The maximum radius in mm, for which shall be sampled.</span></div></h4>
+              <input type="number" name="max_radius" class="field-long" min="1" step="0.1" value="25" required/>
+              <h4>Left Aggregation Function<span class="required">*</span></h4>
+              <select name="left" class="field-long">
+                  <option value="MIP" selected>MIP: Maximum Intensity Projection</option>
+                  <option value="MINIP">MINIP: Minimum Intensity Projection</option>
+                  <option value="AVGIP">AVGIP: Average Intensity Projection</option>
+                  <option value="MEDIP">MEDIP: Median Intensity Projection</option>
+              </select>
+              <h4>Left Aggregation Function<span class="required">*</span></h4>
+              <select name="right" class="field-long">
+                  <option value="MIP">MIP: Maximum Intensity Projection</option>
+                  <option value="MINIP" selected>MINIP: Minimum Intensity Projection</option>
+                  <option value="AVGIP">AVGIP: Average Intensity Projection</option>
+                  <option value="MEDIP">MEDIP: Median Intensity Projection</option>
+              </select>
+          </li>
+          <li>
+              <h3>Context<input name="context" type="checkbox" onclick="document.getElementById('ctx_form').style.display = this.checked ? 'inline' : 'none'"></h3> 
+          </li>
+          <li id="ctx_form" style="display:none">
+              <h4>Side<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The medical side of which  the context information should be taken from (Head,Feet,Left,Right,Anterior,Posterior).</span></div></h4>
+              <select name="ctx_side" class="field-long">
+                  <option value="head">Head</option>
+                  <option value="feet">Feet</option>
+                  <option value="left">Left</option>
+                  <option value="right">Right</option>
+                  <option value="anterior">Anterior (from the Front)</option>
+                  <option value="posterior">Posterior (from the Back)</option>
+              </select>
+              <h4>Number of Samples<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The number of samples which should be taken along the desired projection.</span></div></h4>
+              <input type="number" name="ctx_samples" class="field-long" min="1" step="1" value="5" required/>
+          </li>
+          <li>
+              <h3>Stability<input name="stability" type="checkbox" onclick="document.getElementById('stability_form').style.display = this.checked ? 'inline' : 'none'"></h3>
+          </li>
+          <li id="stability_form" style="display:none">
+                <h4>Kernel Radius 'w'<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The kernel radius in which the CFA image will be sampled to get the stability, the resulting Kernel has size (2w+1)x(2w+1).</span></div></h4>
+                <input type="number" name="stability_w" class="field-long" min="1" step="1" value="2" required/>
+                <h4>Percentile<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The Percentile above which the variance of the image pixel will be displayed.</span></div></h4>
+                <input type="number" name="stability_percentile" class="field-long" min="1" max="100" step="0.001" value="90" required/>
+          </li>
+          <li id="stability_form" style="display:none">
+              <h4>dpi<span class="required">*</span><div class="tooltip">&#9432<span class="tooltiptext">The resolution for the resulting image.</span></div></h4>
+              <input type="number" name="dpi" class="field-long" min="40" step="1" value="320" required/>
+          </li>
+          <li>
+            This may take some time!
+          </li>
+          <li>
+              <input type="submit" value="Submit" />
+          </li>
+      </ul>
+      </form>
+      <div id="loader"></div>
+      <script>
+      l = document.getElementById("loader")
+      f = document.getElementById("form")
+      f.submit = function(e) {
+        l.style.display = "block"
+      }
+      </script>
+  </body>
+</html>
