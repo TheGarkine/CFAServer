@@ -61,3 +61,7 @@ To use this tool, simply put in all the data (according to the algorithm describ
 ## Stability
 
 Since the paper gives no real information, about how excalty the stability should be calculated atop the image, we decided to make a cut at a certain percentile. E.g. if ther percentile is at 95% the highest 5% will be marked from blue (95%) to red (100%/highest value). This is not affected by DPI but only by the resolution resulting from Circle Step Delta and Centerline Step Delta. Since higher kernel radii need much more computational power, be careful when those numbers are cranked up.
+
+## Testing
+
+In the subfolder testing, a script can be found to test bulkwise data. One should be really careful when experimenting since the runtime may exceed expectations.
